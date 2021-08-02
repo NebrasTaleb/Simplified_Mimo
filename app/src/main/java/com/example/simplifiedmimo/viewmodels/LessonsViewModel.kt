@@ -7,12 +7,12 @@ import kotlinx.coroutines.launch
 
 class LessonsViewModel : ViewModel() {
 
-    private lateinit var lessonsRepository: LessonsRepository
+    private var lessonsRepository: LessonsRepository = LessonsRepository()
 
-    init {
+    fun getLessons(){
         // launch a Coroutine that will be canceled when the ViewModel is cleared
         viewModelScope.launch {
-
+            lessonsRepository.getLessons()
         }
     }
 }

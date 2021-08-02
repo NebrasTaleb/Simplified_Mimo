@@ -8,10 +8,11 @@ import com.example.simplifiedmimo.viewmodels.LessonsViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    val lessonsViewModel : LessonsViewModel by viewModels()
+    private val lessonsViewModel : LessonsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        lessonsViewModel.getLessons()
     }
 }
