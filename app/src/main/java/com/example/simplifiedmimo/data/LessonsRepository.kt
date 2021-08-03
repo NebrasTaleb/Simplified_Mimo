@@ -1,25 +1,13 @@
 package com.example.simplifiedmimo.data
 
-import android.widget.Toast
-import com.example.simplifiedmimo.App
-import com.example.voucherprocessor.services.LessonsService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.simplifiedmimo.data.api.HttpClient
+import com.example.simplifiedmimo.data.api.models.Lesson
 
 class LessonsRepository {
 
-    fun getLessons() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = LessonsService.lessonsApi.getLessons()
-            withContext(Dispatchers.Main) {
-                Toast.makeText(
-                    App.appContext,
-                    "the lessons has been fetched successfully!  ${response.lessons.size}",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
+    suspend fun getLessons(): List<Lesson> {
+        // call the lessons api and get the lessons
+        val response = HttpClient.lessonsApi.getLessons()
+        return response.lessons
     }
 }

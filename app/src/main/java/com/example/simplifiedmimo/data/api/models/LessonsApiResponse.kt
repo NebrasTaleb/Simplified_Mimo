@@ -1,4 +1,4 @@
-package com.example.simplifiedmimo.services.api.models
+package com.example.simplifiedmimo.data.api.models
 
 data class LessonsApiResponse(
     val lessons: List<Lesson>

@@ -1,6 +1,6 @@
-package com.example.voucherprocessor.services
+package com.example.simplifiedmimo.data.api
 
-import com.example.simplifiedmimo.services.api.models.LessonsApiResponse
+import com.example.simplifiedmimo.data.api.models.LessonsApiResponse
 import retrofit2.http.GET
 
 interface LessonsApi {
