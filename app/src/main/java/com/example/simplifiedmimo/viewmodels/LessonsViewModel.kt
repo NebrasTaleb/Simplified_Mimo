@@ -19,6 +19,7 @@ class LessonsViewModel : ViewModel() {
         viewModelScope.launch {
             // ask the repository to get the lessons and assign the returned result to the mutable live data
             _lessons.value = lessonsRepository.getLessons()
+//            _lessons.value = lessonsRepository.getMockLessons()
         }
     }
 }
