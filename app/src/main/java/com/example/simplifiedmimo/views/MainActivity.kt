@@ -9,10 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.example.simplifiedmimo.data.api.models.Lesson
 import com.example.simplifiedmimo.data.api.models.hasInteraction
+import com.example.simplifiedmimo.data.database.models.LessonCompletionEvent
 import com.example.simplifiedmimo.databinding.ActivityMainBinding
 import com.example.simplifiedmimo.utils.LessonInputOrder
 import com.example.simplifiedmimo.utils.LessonUtils
 import com.example.simplifiedmimo.viewmodels.LessonsViewModel
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private var currentDisplayedLessonIndex = 0
     private lateinit var currentDisplayedLesson: Lesson
     private lateinit var currentCorrectAnswer: String
+    private lateinit var currentLessonStartingTimestamp: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,28 +39,39 @@ class MainActivity : AppCompatActivity() {
             currentDisplayedLesson = fetchedLessons.first()
             // show the lesson to the user with taking the interaction availability into consideration
             showLesson()
+            // after showing the first lesson, save the starting timestamp of it in currentLessonStartingTimestamp
+            currentLessonStartingTimestamp = Date().toString()
         }
         binding.solveLessonButton.setOnClickListener {
             // reset the views
             resetViews()
-            // check if the current displayed lesson is the last lesson
-            if (currentDisplayedLessonIndex == fetchedLessons.size - 1) {
-                // it's the last lesson so show done layout
-                showLessonsDoneLayout()
-            } else {
-                // it's not the last lesson
-                currentDisplayedLessonIndex++
-                // so get the next one
-                currentDisplayedLesson = fetchedLessons[currentDisplayedLessonIndex]
-                // and show it
-                showLesson()
-            }
+            // insert a new lesson completion record into the database
+            insertNewLessonCompletionEvent()
+            // update the currentLessonStartingTimestamp so the starting timestamp of the next lesson is saved correctly
+            currentLessonStartingTimestamp = Date().toString()
+            // proceed to the next lesson or finish if no lessons remained
+            proceedToNextLessonOrFinish()
         }
         binding.inputEditText.doAfterTextChanged {
             // whenever the text inside the input field is changed, check it if it's equal to the current correct answer or not
             // ("it.toString()" is the current text inside the input field)
             // if they are equal to each other, then enable the Next button so the user can proceed to the next lesson
             binding.solveLessonButton.isEnabled = it.toString() == currentCorrectAnswer
+        }
+    }
+
+    private fun proceedToNextLessonOrFinish() {
+        // check if the current displayed lesson is the last lesson
+        if (currentDisplayedLessonIndex == fetchedLessons.size - 1) {
+            // it's the last lesson so show done layout
+            showLessonsDoneLayout()
+        } else {
+            // it's not the last lesson
+            currentDisplayedLessonIndex++
+            // so get the next one
+            currentDisplayedLesson = fetchedLessons[currentDisplayedLessonIndex]
+            // and show it
+            showLesson()
         }
     }
 
@@ -154,5 +168,15 @@ class MainActivity : AppCompatActivity() {
         binding.startTextView.text = ""
         binding.endTextView.text = ""
         binding.inputEditText.text.clear()
+    }
+
+    private fun insertNewLessonCompletionEvent() {
+        // create a lesson completion event object and insert it into the database
+        val lessonCompletionEvent = LessonCompletionEvent(
+            lessonId = currentDisplayedLesson.id,
+            startingTimestamp = currentLessonStartingTimestamp,
+            completionTimestamp = Date().toString()
+        )
+        lessonsViewModel.insertNewLessonCompletionEvent(lessonCompletionEvent)
     }
 }
