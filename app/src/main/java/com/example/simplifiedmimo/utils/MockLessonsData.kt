@@ -8,11 +8,11 @@ object MockLessonsData {
                 "  \"id\": 1,\n" +
                 "  \"content\": [ {\n" +
                 "      \"color\": \"#ffffff\",\n" +
-                "      \"text\": \"Hell0 \"\n" +
+                "       \"text\": \"Hello \"\n" +
                 "     } ,\n" +
                 "  {\n" +
                 "      \"color\": \"#FF0000\",\n" +
-                "      \"text\": \"W0rld\"\n" +
+                "        \"text\": \"World\"\n" +
                 "  }   ,\n" +
                 "  {\n" +
                 "      \"color\": \"#FFBB86fC\",\n" +
@@ -27,7 +27,7 @@ object MockLessonsData {
                 "  \"id\": 2,\n" +
                 "  \"content\": [ {\n" +
                 "      \"color\": \"#00FF00\",\n" +
-                "      \"text\": \"hello \"\n" +
+                "       \"text\": \"Hello \"\n" +
                 "  } ,\n" +
                 "  {\n" +
                 "      \"color\": \"#FFBB86FC\",\n" +
